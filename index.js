@@ -124,6 +124,17 @@ const decodeWord = (generator, codeword) => {
     return informationWord;
 }
 
+const boundErrorDetection = (probability, hammingDistance, numberOfBits) => {
+    var totalBound = 0;
+
+    for(var i = 1; i <= hammingDistance - 1; i++) {
+        var rightSide = Math.pow(probability, i) * Math.pow((1 - probability), (numberOfBits - i));
+        totalBound += numberOfBits * rightSide + i * rightSide;
+    }
+
+    return totalBound;
+}
+
 
 const numTransmissions = 1000;
 const generatorPolynomial = 0b1011;
@@ -139,3 +150,5 @@ for(var i = 0; i < numTransmissions; i++) {
 console.log("Based on " + numTransmissions + " random transmissions with a success probability of " + successProbability + " yielded an error detection rate of " + (totalErrorsDetected / totalErrorsSent));
 console.log("Total errors sent: " + totalErrorsSent);
 console.log("Total errors detected: " + totalErrorsDetected);
+
+console.log("Lower theoretical bound for error detection: " + boundErrorDetection(0.9, 3, 7));
